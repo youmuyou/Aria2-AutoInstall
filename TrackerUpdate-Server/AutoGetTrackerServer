@@ -1,0 +1,14 @@
+#!/bin/sh
+
+tracker1="/tmp/tracker1"
+tracker2="/tmp/tracker2"
+tracker3="/tmp/tracker3"
+
+wget "https://newtrackon.com/api/stable" -O $tracker1
+wget "https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt" -O $tracker2
+
+cat $tracker1 > $tracker3
+cat $tracker2 >> $tracker3
+
+cat $tracker3 | grep -v ^$ | sort -u | tr "\n" "," | sed 's/.$//' > /var/www/html/index.html
+echo "Last Update Time: "`date` > /var/www/html/update.html
