@@ -13,7 +13,7 @@ else {
     Set-Location (Split-Path -Parent $MyInvocation.MyCommand.Definition)
 }
 
-New-Variable -Name ConfigFile -Value "Aria2Config.conf" -Option Constant
+New-Variable -Name ConfigFile -Value "oriAria2Config.conf" -Option Constant
 
 #main
 "欢迎进入Aria2的Windows端安装与配置程序"
@@ -24,7 +24,7 @@ if ($choice -eq "n") {
     Get-Process -Name aria2c | Stop-Process
     "正在删除文件目录"
     Remove-Item -Recurse -Force "C:\Aria2Download"
-    Remove-Item -Force "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\Aria2StartUp.vbs"
+    Remove-Item -Force "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\Aria2StartUp.ps1"
     "卸载完成"
     Pause
     exit
@@ -37,6 +37,9 @@ Start-Sleep -Seconds 1
 "初始化..."
 #value init
 $desktop = [Environment]::GetFolderPath("Desktop")
+#$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+(Invoke-webrequest -URI "http://tracker.tbuu.xyz:85/").Content > BackupTracker.txt
+#cmd /c ftype Microsoft.Powershellscript.1="C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" "%1"
 
 "初始化完毕..."
 Write-Warning "引导时直接敲击回车键将采用默认值"
@@ -73,7 +76,6 @@ $dirpath = "C:\Aria2Download"
 "max-download-limit=0" >> $ConfigFile
 "enable-mmap=true" >> $ConfigFile
 "save-session-interval=60" >> $ConfigFile
-"bt-tracker=udp://tracker.coppersurfer.tk:6969/announce,udp://tracker.leechers-paradise.org:6969/announce,http://tracker.internetwarriors.net:1337/announce,udp://tracker.opentrackr.org:1337/announce,udp://9.rarbg.to:2710/announce,udp://exodus.desync.com:6969/announce,udp://explodie.org:6969/announce,http://tracker3.itzmx.com:6961/announce,udp://tracker1.itzmx.com:8080/announce,udp://thetracker.org:80/announce,udp://ipv4.tracker.harry.lu:80/announce,udp://tracker.torrent.eu.org:451/announce,udp://tracker.tiny-vps.com:6969/announce,udp://tracker.port443.xyz:6969/announce,udp://tracker.cyberia.is:6969/announce,udp://open.stealth.si:80/announce,udp://open.demonii.si:1337/announce,udp://denis.stalker.upeer.me:6969/announce,udp://bt.xxx-tracker.com:2710/announce,udp://tracker4.itzmx.com:2710/announce" >> $ConfigFile
 "enable-dht=true" >> $ConfigFile
 "bt-enable-lpd=true" >> $ConfigFile
 "enable-peer-exchange=true" >> $ConfigFile
@@ -92,9 +94,11 @@ $dirpath = "C:\Aria2Download"
 "bt-hash-check-seed=true" >> $ConfigFile
 "bt-seed-unverified=true" >> $ConfigFile
 "allow-piece-length-change=true" >> $ConfigFile
+"bt-force-encryption=true" >> $ConfigFile
 
-#convert utf-8 to ascii
-#[io.file]::ReadAllText($ConfigFile, [System.Text.Encoding]::utf8) | ForEach-Object {[io.file]::WriteAllText($ConfigFile, $_, [System.Text.Encoding]::ASCII)}
+#trackerlist = Get-Content BackupTracker.txt
+#"bt-tracker=$tracker" >> $ConfigFile
+
 ./dos2unix.exe $ConfigFile
 
 "`n正在安装程序"
@@ -102,9 +106,10 @@ mkdir "$dirpath"
 mkdir "$dirpath\config"
 Copy-Item –recurse -force .\AriaNG\ $dirpath\
 Copy-Item -force .\sxueck-jump.ico $dirpath\
-Copy-Item -force ".\aria2c.exe" $dirpath\
+Copy-Item -force ".\bin\aria2c.exe" $dirpath\
 New-Item -ItemType file "$dirpath\config\aria2.session"
-Copy-Item -force .\Aria2Config.conf "$dirpath\config\"
+Copy-Item -force .\oriAria2Config.conf "$dirpath\config\"
+Copy-Item .\bin\dos2unix.exe $dirpath -Force
 
 $WshShell = New-Object -comObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut($desktop + "\Aria2下载器.lnk") 
@@ -113,18 +118,26 @@ $Shortcut.IconLocation = "$dirpath\sxueck-jump.ico"
 $Shortcut.Description = "我只是只小白兔"
 $Shortcut.Save()
 
+
+
+Write-Warning "`n非常建议你设置为开机启动,除非你明确知道如何手动运行"
+Start-Sleep -Seconds 1
 $startUp = Read-Host "`n是否设置开机启动Aria2?(y/n)"
 
 if ($startUp -eq "y") {
     "`n正在设置开机启动项目"
-    $startUpFolder = "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
-    "CreateObject(`"WScript.Shell`").Run `"$dirpath\aria2c.exe --conf-path=$dirpath\config\Aria2Config.conf`",0" > $dirpath\Aria2StartUp.vbs
-    Copy-Item "$dirpath\Aria2StartUp.vbs" $startUpFolder
+    $startUpFolder = "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup" 
+    "CreateObject(`"WScript.Shell`").Run `"$dirpath\aria2c.exe --conf-path=$dirpath\config\Aria2Config.conf`",0" > Aria2StartUp.vbs
+    (Get-Content trackerUpdateClient.ps1) -replace 'Replace', "`"$dirpath`"" | Set-Content .\trackerUpdateClient.ps1
+    powershell .\trackerUpdateClient.ps1
+    Copy-Item .\Aria2StartUp.vbs $startUpFolder
+    #.\Aria2StartUp.ps1
 } else {
     "如你所愿"
     Start-Sleep -Seconds 1
 }
 
+#Set-Clipboard -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
 Invoke-Item "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
 
 "`n配置已经完成,enjoy"
