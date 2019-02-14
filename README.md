@@ -24,8 +24,9 @@
 当你安装完成后，打开桌面的"Aria2下载器"快捷方式(图标是一只兔子)即可
 
 ### 高级说明
-1. 如果您认为下载速度过慢，可以尝试运行trackerUpdateClient.ps1脚本更新tracker服务器地址，或者收到更改bt-tracker选项，在你安装的时候，通常会使用最新的tracker地址
+1. 如果您认为下载速度过慢，可以尝试运行trackerUpdateClient.ps1脚本更新tracker服务器地址，或者手动更改bt-tracker选项，在你安装的时候，通常会使用最新的tracker地址
 2. 如果你想将本项目复制到其他计算机，请重新下载项目，否则有很大概率无法运行
+3. 你也可以手动从作者的[tracker更新服务器](http://tracker.tbuu.xyz:85)中自由设置tracker列表，更新频率为[一周一次](http://tracker.tbuu.xyz:85/update.html)
 
 ### 安装浏览器支持插件
 如果你是Chrome浏览器，可以访问Chrome商店安装[YAAW](https://chrome.google.com/webstore/detail/yaaw-for-chrome/dennnbdlpgjgbcjfgaohdahloollfgoc?hl=en)插件，或者使用我已经准备好的离线YAAW(YAAW-Chrome中)，[具体安装流程请看](https://blog.csdn.net/yshenhua/article/details/80901677)
