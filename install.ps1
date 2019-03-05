@@ -103,7 +103,7 @@ $dhtfile = "$dirpath\config\dht.dat"
 #trackerlist = Get-Content BackupTracker.txt
 #"bt-tracker=$tracker" >> $ConfigFile
 
-./dos2unix.exe $ConfigFile
+./bin/dos2unix.exe $ConfigFile
 
 "`n正在安装程序"
 mkdir "$dirpath"

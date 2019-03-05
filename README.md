@@ -5,8 +5,7 @@
 ### 使用流程：
 
 ### 准备
-从[该页面](https://github.com/sxueck/Aria2-WindowsClient/releases)下载Aria2-WindowsClient.zip文件，或者如果你想提前尝试新功能，可以使用(不建议这样)
-    <br/><code>git clone https://github.com/sxueck/Aria2-WindowsClient.git</code>
+从[该链接](https://github.com/sxueck/Aria2-AutoInstall/archive/master.zip)下载Aria2-WindowsClient.zip文件
 
 **如果你找不到输入入口：可以按Win+X->Windows PowerShell(管理员)或Win+X->命令提示符(管理员)**
 
