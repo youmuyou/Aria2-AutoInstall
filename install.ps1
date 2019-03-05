@@ -8,7 +8,7 @@ if ($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administ
 }
 else {
     "当前处于管理员模式"
-    
+
     #切换到脚本所在目录
     Set-Location (Split-Path -Parent $MyInvocation.MyCommand.Definition)
 }
