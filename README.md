@@ -1,6 +1,6 @@
 ## Aria2-Windows AutoInstall
 
-### 提醒：由于本项目对比同类没有存在必要，你可以使用[AriaNg-Gui](https://github.com/Xmader/aria-ng-gui)项目，该项目集成了Aria2，同时更简洁
+### 提醒：你可以使用[AriaNg-Gui](https://github.com/Xmader/aria-ng-gui)项目，该项目集成了Aria2，同时更简洁
 
 本项目用于自动化搭建Windows平台Aria2c
 
